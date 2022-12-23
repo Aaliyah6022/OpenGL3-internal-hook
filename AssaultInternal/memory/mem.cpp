@@ -1,0 +1,23 @@
+#include "mem.h"
+
+uintptr_t mem::FindDMAAdy(HANDLE hproc, uintptr_t ptr, std::vector<unsigned int> offsets)
+{
+	uintptr_t addr = ptr;
+	for (unsigned int i = 0; i < offsets.size(); i++)
+	{
+		ReadProcessMemory(hproc, (BYTE*)addr, &addr, sizeof(addr), 0);
+		addr += offsets[i];
+	}
+	return addr;
+}
+
+uintptr_t mem::FindDMAAdy(uintptr_t ptr, std::vector<unsigned int> offsets)
+{
+	uintptr_t addr = ptr;
+	for (unsigned int i = 0; i < offsets.size(); i++)
+	{
+		addr = *(uintptr_t*)addr;
+		addr += offsets[i];
+	}
+	return addr;
+}
